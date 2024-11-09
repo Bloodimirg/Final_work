@@ -1,15 +1,24 @@
 from rest_framework import permissions
 
 
-class IsAdmin(permissions.BasePermission):
-    """Проверка на администратора"""
+class IsAuthenticatedOrReadOnly(permissions.BasePermission):
+    """Проверка, что запрос анонимный (чтение) или пользователь авторизован"""
 
     def has_permission(self, request, view):
-        return request.user.is_authenticated and request.user.groups.filter(name="admin").exists()
+        if request.method in permissions.SAFE_METHODS:  # Только чтение
+            return True
+        return (
+            request.user and request.user.is_authenticated
+        )  # Для изменений нужно быть аутентифицированным
 
 
-class IsAuthenticatedUser(permissions.BasePermission):
-    """Проверка на аутентифицированного пользователя"""
+# Разрешение для владельца (автора)
+class IsOwnerOrAdmin(permissions.BasePermission):
+    """Проверка на владельца или администратора"""
 
-    def has_permission(self, request, view):
-        return request.user.is_authenticated and not request.user.groups.filter(name="admin").exists()
+    def has_object_permission(self, request, view, obj):
+        if request.user.is_staff:  # Админ может редактировать любые объекты
+            return True
+        return (
+            obj.author == request.user
+        )  # Только автор объекта может редактировать его
