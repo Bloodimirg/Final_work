@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from users.managers import CustomUserManager
 
 NULLABLE = {"blank": True, "null": True}
 
@@ -25,6 +26,8 @@ class User(AbstractUser):
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
+
+    objects = CustomUserManager()  # Для тестов кастомная модель
 
     class Meta:
         verbose_name = "Пользователь"
