@@ -6,10 +6,11 @@
 4. Тесты pytest, pytest-django
 
 ### Логирование и восстановление пароля
-- register/ = регистрация
+Администратор создаётся автоматически командой csu при запуске docker, логин и пароль администратора указываются в .env
+- register/ = регистрация пользователя
 - login/ = авторизация
-- password-reset/ = отправка токена POST("email"=)
-- password-reset-confirm/ = подтверждение POST("token"=, "new_password"=)
+- password-reset/ = отправка ссылки с токеном на почту POST("email"=)
+- password-reset-confirm/ = задать новый пароль POST("token"=, "new_password"=)
 
 ### Реализован поиск товаров по названию с использованием django-filter.
 - GET board/ad/?title=название
