@@ -35,6 +35,8 @@ class CustomTokenObtainPairView(TokenObtainPairView):
 class PasswordResetRequestView(APIView):
     """Запрос восстановления пароля"""
 
+    permission_classes = [AllowAny]
+
     def post(self, request):
         email = request.data.get("email")
         try:
